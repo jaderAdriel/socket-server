@@ -12,7 +12,6 @@ def server (host = 'localhost', port = 8000):
     time.sleep(1)
     print('Pronto')
     
-    filename = 'index.html'
 
     while True:
         print("Esperando dados do cliente")
@@ -22,7 +21,7 @@ def server (host = 'localhost', port = 8000):
             if data:
                 print('Requisição : "%s" \nfrom %s' %(data.decode(), address))
                 print('Respondendo...', end=' ')
-                client.send('Sim, o Maicon é muito gay'.encode())
+                client.send('OK!'.encode())
                 print('Pronto')
         except:
             print('erro')
