@@ -1,31 +1,34 @@
 import socket
-import time
+import response_routes
 
-def server (host = 'localhost', port = 8000):
+def server (host = 'localhost', port = 8001):
     data_payload = 2048
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_adrees = (host, port)
 
-    print("Começando servidor %s na porta %s ... " %server_adrees, end='')
-    sock.bind(server_adrees)
-    sock.listen(5)
-    time.sleep(1)
-    print('Pronto')
+    try:
+        print("Começando servidor %s na porta %s" %server_adrees, end='')
+        sock.bind(server_adrees)
+        sock.listen(5)
+    except:
+        sock.close()
+        print('\nocupado')
+        return 
     
 
     while True:
-        print("Esperando dados do cliente")
-        client, address = sock.accept()
-        try:
-            data = client.recv(data_payload)
-            if data:
-                print('Requisição : "%s" \nfrom %s' %(data.decode(), address))
-                print('Respondendo...', end=' ')
-                client.send('OK!'.encode())
-                print('Pronto')
+        print("\nEsperando dados do cliente")
+        client, _ = sock.accept()
+        try: 
+            request = client.recv(data_payload)
+            if request: 
+                response = response_routes.__init__(request.decode("utf-8")) 
+                print('Request: ',request, '\nResponse: ', response.encode("utf-8"))
+                client.send(response.encode("utf-8"))
         except:
-            print('erro')
+            print('\nerro')
             sock.close()
+            return 
 
 
 
